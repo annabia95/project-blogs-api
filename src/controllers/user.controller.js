@@ -1,10 +1,8 @@
-const express = require('express');
 const { generateJWTToken } = require('../utils/JWTToken');
 
-const userRouter = express.Router();
 const userService = require('../services/userService');
 
-userRouter.post('/', async (req, res) => {
+const createUser = async (req, res) => {
   const { email } = req.body;
   const response = await userService.createUser(req.body);
   if (response === 'invalid fields') {
@@ -16,6 +14,17 @@ userRouter.post('/', async (req, res) => {
   } catch (error) {
     return res.status(500).json({ message: 'Internal Erros' });
   }
-});
+};
+const getUsers = async (_req, res) => {
+  try {
+    const response = await userService.getAllUsers();
+    return res.status(200).json(response);
+  } catch (error) {
+    return res.status(500).json({ message: 'Internal Erros' });
+  }
+};
 
-module.exports = userRouter;
+module.exports = {
+  createUser,
+  getUsers,
+};

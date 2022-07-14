@@ -9,6 +9,14 @@ const createUser = async ({ displayName, email, password, image }) => {
   return userCreate;
 };
 
+const getAllUsers = async () => {
+  const user = await User.findAll(
+    { attributes: ['id', 'displayName', 'email', 'image'] },
+  );
+  return user;
+};
+
 module.exports = {
   createUser,
+  getAllUsers,
 };
