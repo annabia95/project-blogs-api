@@ -10,9 +10,12 @@ userRouter.post('/', async (req, res) => {
   if (response === 'invalid fields') {
     return res.status(409).json({ message: 'User already registered' });
   }
-
-  const token = generateJWTToken(email);
-  return res.status(201).json({ token });
+  try {
+    const token = generateJWTToken(email);
+    return res.status(201).json({ token });
+  } catch (error) {
+    return res.status(500).json({ message: 'Internal Erros' });
+  }
 });
 
 module.exports = userRouter;
