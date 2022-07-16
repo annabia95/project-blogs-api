@@ -12,6 +12,10 @@ MSC + Sequelize
 :-------------------------:|
 ![Screeshot](./images/desenho.png)  |
 
+Banco de Dados  - Blogs API
+:-------------------------:|
+![Screeshot](./images/db.png)  |
+
 ---
 
 ## Demo
