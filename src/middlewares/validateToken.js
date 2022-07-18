@@ -10,7 +10,8 @@ const validateToken = async (req, res, next) => {
   }
 
   try {
-    jwt.verify(token, SECRET);
+    const user = jwt.verify(token, SECRET);
+    req.user = user;
     next();
   } catch (e) {
     console.log('error', e.message);
