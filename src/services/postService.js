@@ -1,4 +1,9 @@
-const { User, Category, BlogPost } = require('../database/models');
+const {
+  User,
+  Category,
+  BlogPost,
+  PostCategory,
+} = require('../database/models');
 
 const getPosts = async () => {
   const posts = await BlogPost.findAll({
@@ -7,11 +12,11 @@ const getPosts = async () => {
       { model: Category, as: 'categories', through: { attributes: [] } },
     ],
   });
-  return posts; 
+  return posts;
 };
 
 const getPostById = async (id) => {
-  const user = await BlogPost.findOne({
+  const posts = await BlogPost.findOne({
     where: { id },
     attributes: ['id', 'title', 'content', 'userId', 'published', 'updated'],
     include: [
@@ -19,7 +24,7 @@ const getPostById = async (id) => {
       { model: Category, as: 'categories', through: { attributes: [] } },
     ],
   });
-  return user;
+  return posts;
 };
 
 const verifyPosts = async (id, email) => {
@@ -29,7 +34,7 @@ const verifyPosts = async (id, email) => {
 };
 
 const updatePost = async ({ title, content, id, email }) => {
-   const verify = await verifyPosts(id, email);
+  const verify = await verifyPosts(id, email);
   if (verify === false) return 'unauthorized user';
 
   await BlogPost.update({ title, content }, { where: { id } });
@@ -39,8 +44,57 @@ const updatePost = async ({ title, content, id, email }) => {
   return postUpdate;
 };
 
+const removePost = async ({ id, email }) => {
+  const post = await BlogPost.findOne({ where: { id } });
+  if (!post) return 'post not founded';
+  const verify = await verifyPosts(id, email);
+  if (verify === false) return 'unauthorized user';
+  const removedPost = await BlogPost.destroy({
+    where: { id },
+  });
+  return removedPost;
+};
+
+const validateCategoryIds = async (categoryIds) => {
+  const getAllCategories = await Category.findAll();
+
+  const chekIds = categoryIds.every((id) =>
+    getAllCategories.some((element) => id === element.dataValues.id));
+
+  return chekIds;
+};
+
+const findUserId = async (email) => {
+  const user = await User.findOne({ where: { email } });
+  return user.id;
+};
+
+const createNewPost = async (title, content, categoryIds, email) => {
+  const validCategoryIds = await validateCategoryIds(categoryIds);
+  if (!validCategoryIds) return 'invalid category';
+
+  const dateTime = new Date();
+  const userId = await findUserId(email);
+  const createNewBlog = await BlogPost.create({
+    title,
+    content,
+    userId,
+    published: dateTime,
+    updated: dateTime,
+  });
+
+  const postId = createNewBlog.id;
+  categoryIds.forEach((categoryId) =>
+    PostCategory.create({ postId, categoryId }));
+
+  const response = await BlogPost.findByPk(postId);
+  return response;
+};
+
 module.exports = {
   getPosts,
   getPostById,
   updatePost,
+  removePost,
+  createNewPost,
 };
