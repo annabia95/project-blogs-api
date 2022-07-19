@@ -37,8 +37,19 @@ const getUserId = async (req, res) => {
   }
 };
 
+const deleteUser = async (req, res) => {
+  const email = req.user.data;
+  await userService.deleteUserId(email);
+  try {
+    return res.status(204).json();
+  } catch (error) {
+    return res.status(500).json({ message: 'Internal Erros' });
+  }
+};
+
 module.exports = {
   createUser,
   getUsers,
   getUserId,
+  deleteUser,
 };

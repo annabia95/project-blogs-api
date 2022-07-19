@@ -16,6 +16,7 @@ router.post('/login', validateLogin, loginController);
 router.post('/user', validateUser, userController.createUser);
 router.get('/user/:id', validateToken, userController.getUserId);
 router.get('/user', validateToken, userController.getUsers);
+router.delete('/user/me', validateToken, userController.deleteUser);
 router.get('/post', validateToken, postsController.getAllPosts);
 router.get('/post/:id', validateToken, postsController.getPostsId);
 router.post('/post', validateToken, postsController.createPost);
