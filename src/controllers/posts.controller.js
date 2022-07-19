@@ -84,10 +84,21 @@ const createPost = async (req, res) => {
   return res.status(201).json(response);
 };
 
+const searchPosts = async (req, res) => {
+  const { q } = req.query;
+  try {
+    const response = await postService.searchPost(q);
+    return res.status(200).json(response);
+  } catch (error) {
+    return res.status(500).json({ message: 'Error' });
+  }
+};
+
 module.exports = {
   getAllPosts,
   getPostsId,
   updatePosts,
   deletePosts,
   createPost,
+  searchPosts,
 };

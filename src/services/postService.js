@@ -91,10 +91,32 @@ const createNewPost = async (title, content, categoryIds, email) => {
   return response;
 };
 
+const searchPost = async (q) => {
+  if (q === '') {
+    const getAllPosts = await BlogPost.findAll({
+      include: [
+        { model: User, as: 'user', attributes: { exclude: 'password' } },
+        { model: Category, as: 'categories', through: { attributes: [] } },
+      ],
+    });
+    return getAllPosts;
+  }
+  const search = await BlogPost.findAll({
+    where: {
+      [Op.or]: [{ title: { [Op.like]: `%${q}%` } }, { content: { [Op.like]: `%${q}%` } }] },
+    include: [{ model: User, as: 'user', attributes: { exclude: 'password' } },
+      { model: Category, as: 'categories', through: { attributes: [] } },
+    ],
+  });
+  if (!search) return [];
+  return search;
+};
+
 module.exports = {
   getPosts,
   getPostById,
   updatePost,
   removePost,
   createNewPost,
+  searchPost,
 };
