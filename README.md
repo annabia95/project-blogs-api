@@ -113,6 +113,16 @@ Neste projeto, desenvolvi as seguintes habilidades:
 
 ## 11 - Crie o modelo 'PostCategory' em 'src/database/models/postCategory.js' com as propriedades e associações corretas
 
+## 12 - Sua aplicação deve ter o endpoint POST `/post`
+
 ## 13 - Sua aplicação deve ter o endpoint GET `/post`
 
 ## 14 - Sua aplicação deve ter o endpoint GET `/post/:id`
+
+## 15 - Sua aplicação deve ter o endpoint PUT `/post/:id`
+
+## 16 - Sua aplicação deve ter o endpoint DELETE `/post/:id`
+
+## 17 - Sua aplicação deve ter o endpoint DELETE `/user/me`
+
+## 18 - Sua aplicação deve ter o endpoint GET `/post/search?q=:searchTerm`
